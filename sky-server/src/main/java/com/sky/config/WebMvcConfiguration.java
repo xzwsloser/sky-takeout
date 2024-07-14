@@ -51,14 +51,14 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.sky.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.sky.controller"))  // 指定扫描的包
                 .paths(PathSelectors.any())
                 .build();
         return docket;
     }
 
     /**
-     * 设置静态资源映射
+     * 设置静态资源映射,注意在MVC 配置类中继承相关的配置
      * @param registry
      */
     protected void addResourceHandlers(ResourceHandlerRegistry registry) {

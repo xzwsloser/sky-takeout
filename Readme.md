@@ -31,4 +31,5 @@
 [swagger_use.md](doc%2Fswagger_use.md)
 ## 员工管理功能
 [employee_manager.md](doc%2Femployee_manager.md)
-
+## 菜品管理
+[dish_manager.md](doc%2Fdish_manager.md)

@@ -81,12 +81,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         // 设置密码,使用默认密码,还是注意通过常量的方式进行应用
         employee.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));
         // 设置当前时间
-        employee.setCreateTime(LocalDateTime.now());
-        employee.setUpdateTime(LocalDateTime.now());
+
         // 设置修改人
-        // 这里需要完善代码,可以使用 ThreadLocal 或者 JWT
-        employee.setCreateUser(BaseContext.getCurrentId());
-        employee.setUpdateUser(BaseContext.getCurrentId());
+
         // 这里需要处理用户名已经存在不可以添加用户的问题
         employeeMapper.save(employee);
         return Result.success();

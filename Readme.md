@@ -33,3 +33,5 @@
 [employee_manager.md](doc%2Femployee_manager.md)
 ## 菜品管理
 [dish_manager.md](doc%2Fdish_manager.md)
+## 套餐查询(自主任务)
+[set_meal_manager.md](doc%2Fset_meal_manager.md)

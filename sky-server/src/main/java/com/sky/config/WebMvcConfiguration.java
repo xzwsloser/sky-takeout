@@ -54,14 +54,36 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
                 .description("苍穹外卖项目接口文档")
                 .build();
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
+                .groupName("管理端接口")
                 .apiInfo(apiInfo)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.sky.controller"))  // 指定扫描的包
+                .apis(RequestHandlerSelectors.basePackage("com.sky.controller.admin"))  // 指定扫描的包
                 .paths(PathSelectors.any())
                 .build();
         return docket;
     }
 
+
+    /**
+     * 通过knife4j生成接口文档,扫描不同的包
+     * @return
+     */
+    @Bean
+    public Docket docket2() {
+        ApiInfo apiInfo = new ApiInfoBuilder()
+                .title("苍穹外卖项目接口文档")
+                .version("2.0")
+                .description("苍穹外卖项目接口文档")
+                .build();
+        Docket docket = new Docket(DocumentationType.SWAGGER_2)
+                .groupName("用户端接口")
+                .apiInfo(apiInfo)
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.sky.controller.user"))  // 指定扫描的包
+                .paths(PathSelectors.any())
+                .build();
+        return docket;
+    }
     /**
      * 设置静态资源映射,注意在MVC 配置类中继承相关的配置
      * @param registry

@@ -35,3 +35,5 @@
 [dish_manager.md](doc%2Fdish_manager.md)
 ## 套餐查询(自主任务)
 [set_meal_manager.md](doc%2Fset_meal_manager.md)
+## 店铺营业状态设置
+[shop_status_manager.md](doc%2Fshop_status_manager.md)

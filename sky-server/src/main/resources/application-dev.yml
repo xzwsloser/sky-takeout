@@ -6,3 +6,9 @@ sky:
     database: sky_take_out
     username: root
     password: 808453
+spring:
+  redis:
+    password: 808453
+    port: 6379
+    host: 192.168.59.132
+

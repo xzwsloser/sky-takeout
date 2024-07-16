@@ -1,0 +1,18 @@
+# 店铺营业状态设计
+- 营业状态,可以点单
+- 打烊,不可以点单
+- 接口设计:
+  - 设置营业状态
+  - 管理端查询营业状态
+  - 用户端查询营业状态
+- 设置营业状态：
+  - path: /admin/shop/{status}
+  - 方式使用 PUT方式
+- 查看营业状态:
+  - 使用 /admin/shop/status , /user/shop/status 作为路径
+  - 方式使用 GET 方式
+- 如果存储单个数据,那么就会造成空间的极度浪费
+- 补充知识点：
+  - RedisTemplate用于操作各种类型的数据,不会限制数据类型为 String类型,所以利用 RedisTemplate取出数据的时候还需要强制数据类型转换
+  - StringRedisTemplate强制要求操作的数据类型为 String类型,从而取出数据的时候也会直接取出String类型不需要自动类型转换
+- Spring中如果存在两个同名的 Bean 就会报错,所以最好在 @RestController注解中指定Bean的名称,否则默认就是类名第一个字母小写

@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8080  # 注意 SpringBoot文件的书写方法,在开发环境中写相关的配置,在这里引用dev中的配置项并且指定环境
 
 spring:
   profiles:
@@ -37,3 +37,8 @@ sky:
     admin-ttl: 72000
     # 设置前端传递过来的令牌名称
     admin-token-name: token
+  alioss:
+    endpoint: oss-cn-hangzhou.aliyuncs.com
+    access-key-id: LTAI5t8oVPMPHiV4r992QypS
+    access-key-secret: iWhOxSvdZv5ZcSltsGvAs1wgfLf9BS
+    bucket-name: dev-sky-takeout

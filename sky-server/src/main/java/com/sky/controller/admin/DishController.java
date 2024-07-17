@@ -76,4 +76,11 @@ public class DishController {
         List<Dish> dishes = dishService.getDishByCategoryId(categoryId);
         return Result.success(dishes);
     }
+
+    @PostMapping("/status/{status}")
+    @ApiOperation("菜皮的起售和停售状态")  // id 就是 query参数
+    public Result setStatus(@PathVariable("status")Integer status , Long id){
+        dishService.setStatus(id,status);
+        return Result.success();
+    }
 }

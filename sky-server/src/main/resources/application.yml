@@ -34,11 +34,20 @@ sky:
     # 设置jwt签名加密时使用的秘钥
     admin-secret-key: itcast
     # 设置jwt过期时间
-    admin-ttl: 72000
+    admin-ttl: 7200000
     # 设置前端传递过来的令牌名称
     admin-token-name: token
+    # 用户端 jwt签名加密时使用的密钥
+    user-secret-key: itheima
+    # 设置 jwt过期时间
+    user-ttl: 7200000
+    # 设置前端传递过来的请求头
+    user-token-name: authentication
   alioss:
     endpoint: oss-cn-hangzhou.aliyuncs.com
     access-key-id: LTAI5t8oVPMPHiV4r992QypS
     access-key-secret: iWhOxSvdZv5ZcSltsGvAs1wgfLf9BS
     bucket-name: dev-sky-takeout
+  wechat:
+    appid: wx671e489d6fa25713
+    secret: a05106912920b676a255c40ff95c4796

@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -148,5 +149,36 @@ public class DishServiceImpl implements DishService {
         // 根据categoryId查询菜品
        List<Dish> dish = dishMapper.getDishByCategoryId(categoryId);
         return dish;
+    }
+
+    /**
+     * 条件查询菜品和口味
+     * @param dish
+     * @return
+     */
+    public List<DishVO> listWithFlavor(Dish dish) {
+        // 注意之后更新对象的参数一般传递对象本身
+        List<Dish> dishList = dishMapper.getDishByCategoryId(dish.getCategoryId());
+
+        List<DishVO> dishVOList = new ArrayList<>();
+
+        for (Dish d : dishList) {
+            DishVO dishVO = new DishVO();
+            BeanUtils.copyProperties(d,dishVO);
+
+            //根据菜品id查询对应的口味
+            List<DishFlavor> flavors = dishFlavorMapper.getFlavorByDishId(d.getId());
+
+            dishVO.setFlavors(flavors);
+            dishVOList.add(dishVO);
+        }
+
+        return dishVOList;
+    }
+
+    @Override
+    public void setStatus(Long id, Integer status) {
+        // 根据id查询菜品并且插入
+        dishMapper.setStatus(id,status);
     }
 }

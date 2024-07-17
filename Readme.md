@@ -37,3 +37,4 @@
 [set_meal_manager.md](doc%2Fset_meal_manager.md)
 ## 店铺营业状态设置
 [shop_status_manager.md](doc%2Fshop_status_manager.md)
+## 微信登录和上篇浏览功能开发

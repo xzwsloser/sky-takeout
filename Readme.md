@@ -41,3 +41,5 @@
 [we_chat_development.md](doc%2Fwe_chat_development.md)
 ## 缓存商品和购物车
 [shop_car_cache.md](doc%2Fshop_car_cache.md)
+## 用户下单和支付功能
+[wx_pay.md](doc%2Fwx_pay.md)

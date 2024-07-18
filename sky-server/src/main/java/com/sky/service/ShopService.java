@@ -9,5 +9,5 @@ import org.springframework.stereotype.Service;
  * @Date 2024/7/16 19:51
  */
 @Service
-public class ShopService {
+public interface ShopService {
 }

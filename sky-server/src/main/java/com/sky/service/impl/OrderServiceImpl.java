@@ -1,20 +1,24 @@
 package com.sky.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
 import com.sky.context.BaseContext;
-import com.sky.dto.OrdersPaymentDTO;
-import com.sky.dto.OrdersSubmitDTO;
+import com.sky.dto.*;
 import com.sky.entity.*;
 import com.sky.exception.AddressBookBusinessException;
 import com.sky.exception.OrderBusinessException;
 import com.sky.exception.ShoppingCartBusinessException;
 import com.sky.mapper.*;
 import com.sky.properties.WeChatProperties;
+import com.sky.result.PageResult;
 import com.sky.service.OrderService;
 import com.sky.utils.WeChatPayUtil;
 import com.sky.vo.OrderPaymentVO;
+import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderSubmitVO;
+import com.sky.vo.OrderVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
@@ -25,6 +29,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.sky.entity.Orders.*;
 
 /**
  * @author xzw
@@ -159,5 +166,126 @@ public class OrderServiceImpl implements OrderService {
                 .build();
 
         orderMapper.update(orders);
+    }
+
+
+    /**
+     *  查看历史订单
+     * @param ordersPageQueryDTO
+     * @return
+     */
+    @Override
+    public PageResult queryHistoryOrder(OrdersPageQueryDTO ordersPageQueryDTO) {
+        PageHelper.startPage(ordersPageQueryDTO.getPage(),ordersPageQueryDTO.getPageSize());
+        Page<OrderVO> orders = orderMapper.queryByUserId(BaseContext.getCurrentId());
+        // 开始查询细节对象
+        // 就是把每一个订单分别进行细节对象的查询
+        for (OrderVO order : orders.getResult()) {
+            order.setOrderDetailList(orderDetailMapper.getByOrderId(order.getId()));
+        }
+        // 开始封装对象返回
+        PageResult pageResult = new PageResult();
+        pageResult.setTotal(orders.getTotal());
+        pageResult.setRecords(orders.getResult());
+        return pageResult;
+    }
+
+    @Override
+    public OrderVO getOrders(Long orderId) {
+        OrderVO orderVO = orderMapper.queryOrderId(orderId);
+        // 封装订单细节对象
+        orderVO.setOrderDetailList(orderDetailMapper.getByOrderId(orderId));
+        return orderVO;
+    }
+
+    @Override
+    @Transactional
+    public void cancelById(Long orderId) {
+        // 取消订单
+        orderMapper.deleteOrder(orderId);
+        // 删除细节信息
+        orderDetailMapper.deleteOrderDetail(orderId);
+    }
+
+    @Override
+    @Transactional
+    public void getSameOrder(Long orderId) {
+        // 直接在order表中查出数据并且插入
+        Orders orders = orderDetailMapper.getOrderById(orderId);
+        orders.setId(null);
+        // 插入数据
+        orderMapper.insert(orders);
+        // 查询细节表中的数据
+        List<OrderDetail> orderDetails = orderDetailMapper.getByOrderId(orderId);
+        for (OrderDetail orderDetail : orderDetails) {
+            orderDetail.setOrderId(orderId);
+            orderDetail.setId(null);  // 表示重新分配id
+        }
+        // 插入数据
+        orderDetailMapper.insertBatch(orderDetails);
+    }
+
+    @Override
+    public PageResult searchOrder(OrdersPageQueryDTO ordersPageQueryDTO) {
+        // 根据条件查询
+        PageHelper.startPage(ordersPageQueryDTO.getPage(), ordersPageQueryDTO.getPageSize());
+        Orders orders = new Orders();
+        BeanUtils.copyProperties(ordersPageQueryDTO,orders);
+        Page<Orders> page = orderMapper.searchOrder(orders);
+        List<Orders> result = page.getResult();
+        // 是否需要根据时间过滤
+        LocalDateTime beginTime = ordersPageQueryDTO.getBeginTime();
+        LocalDateTime endTime = ordersPageQueryDTO.getEndTime();
+        if(beginTime != null && endTime != null){
+            result = result.stream().filter(order -> order.getOrderTime().isBefore(endTime) && order.getOrderTime().isAfter(beginTime)).collect(Collectors.toList());
+        } else if(beginTime == null && endTime != null){
+            result = result.stream().filter(order -> order.getOrderTime().isAfter(beginTime)).collect(Collectors.toList());
+        } else if(beginTime != null && endTime == null){
+            result = result.stream().filter(order -> order.getOrderTime().isBefore(endTime)).collect(Collectors.toList());
+        }
+        return new PageResult(page.getTotal(),page.getResult());
+    }
+
+    @Override
+    public void rejectOrder(OrdersRejectionDTO ordersRejectionDTO) {
+        // 拒绝订单
+        orderMapper.updateRejectedOrder(ordersRejectionDTO.getId(),ordersRejectionDTO.getRejectionReason());
+    }
+
+    @Override
+    public void confirmOrder(OrdersConfirmDTO ordersConfirmDTO) {
+        // 确认订单
+        orderMapper.updateOrderStatus(ordersConfirmDTO.getId(),CONFIRMED);
+    }
+
+    @Override
+    public OrderStatisticsVO countStatus() {
+        // 查询各种状态的商品
+        OrderStatisticsVO orderStatisticsVO = new OrderStatisticsVO();
+        orderStatisticsVO.setConfirmed(orderMapper.getConfirmed());
+        orderStatisticsVO.setToBeConfirmed(orderMapper.getBeConfirmed());
+        orderStatisticsVO.setDeliveryInProgress(orderMapper.getDelivery());
+        return orderStatisticsVO;
+    }
+    @Override
+    public void cancelOrder(OrdersCancelDTO ordersCancelDTO) {
+        // 就是填写状态就可以了
+        orderMapper.cancelOrder(ordersCancelDTO.getId(),ordersCancelDTO.getCancelReason());
+    }
+
+    @Override
+    public void deliveryOrder(Long id) {
+        // 首先查询订单
+        Orders orders = orderMapper.getOrderById(id);
+        // 设置相关信息
+        orders.setEstimatedDeliveryTime(LocalDateTime.now().plusHours(1));
+        // 更新
+        orders.setStatus(DELIVERY_IN_PROGRESS);
+        orderMapper.update(orders);
+    }
+
+    @Override
+    public void completeOrder(Long id) {
+        orderMapper.updateOrderStatus(id,COMPLETED);
     }
 }

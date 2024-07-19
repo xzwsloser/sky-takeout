@@ -1,8 +1,12 @@
 package com.sky.mapper;
 
+import com.github.pagehelper.Page;
 import com.sky.entity.Orders;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import com.sky.vo.OrderVO;
+import org.apache.ibatis.annotations.*;
+import org.springframework.web.bind.annotation.PutMapping;
+
+import java.util.List;
 
 /**
  * @author xzw
@@ -28,4 +32,38 @@ public interface OrderMapper {
      * @param orders
      */
     void update(Orders orders);
+
+    @Select("select * from orders where user_id = #{userId}")
+    Page<OrderVO> queryByUserId(Long userId);
+
+    @Select("select * from orders where id = #{orderId}")
+    OrderVO queryOrderId(Long orderId);
+
+    @Delete("delete from orders where id = #{orderId}")
+    void deleteOrder(Long orderId);
+
+    Page<Orders> searchOrder(Orders orders);
+
+    @Select("select count(*) from orders where status = 3")
+    Integer getConfirmed();
+
+    @Select("select count(*) from orders where status = 2")
+    Integer getBeConfirmed();
+
+    @Select("select count(*) from orders where status = 4")
+    Integer getDelivery();
+
+
+    @Update("update orders set status = #{status} where id = #{id}")
+    void updateOrderStatus(@Param("id") Long id, @Param("status") Integer status);
+
+    @Update("update orders set rejection_reason = #{rejectionReason} where id = #{id}")
+    void updateRejectedOrder(@Param("id") Long id, @Param("rejectionReason") String rejectionReason);
+
+    @Update("update orders set cancel_reason = #{cancelReason} ,status = 6 where id = #{id}")
+    void cancelOrder(@Param("id")Long id, @Param("cancelReason") String cancelReason);
+
+    @Select("select * from orders where id = #{id}")
+    Orders getOrderById(Long id);
+
 }

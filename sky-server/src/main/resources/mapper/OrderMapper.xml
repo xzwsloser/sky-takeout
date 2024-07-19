@@ -50,8 +50,29 @@
             <if test="deliveryTime != null">
                 delivery_time = #{deliveryTime}
             </if>
+            <if test="estimatedDeliveryTime != null">
+                estimated_delivery_time = #{estimatedDeliveryTime}
+            </if>
         </set>
         where id = #{id}
     </update>
 
+
+    <select id="searchOrder" resultType="Orders">
+        select * from orders
+        <where>
+            <if test="number != null">
+                number = #{number}
+            </if>
+
+            <if test="phone != null">
+               and phone = #{phone}
+            </if>
+
+            <if test="status">
+                and status = #{status}
+            </if>
+<!--             时间使用 java 程序处理   -->
+        </where>
+    </select>
 </mapper>

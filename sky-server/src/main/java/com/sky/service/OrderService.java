@@ -1,9 +1,11 @@
 package com.sky.service;
 
-import com.sky.dto.OrdersPaymentDTO;
-import com.sky.dto.OrdersSubmitDTO;
+import com.sky.dto.*;
+import com.sky.result.PageResult;
 import com.sky.vo.OrderPaymentVO;
+import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderSubmitVO;
+import com.sky.vo.OrderVO;
 import org.springframework.stereotype.Service;
 
 /**
@@ -36,4 +38,43 @@ public interface OrderService {
          */
         void paySuccess(String outTradeNo);
 
+        /**
+         * 查询历史订单
+         * @param ordersPageQueryDTO
+         * @return
+         */
+        PageResult queryHistoryOrder(OrdersPageQueryDTO ordersPageQueryDTO);
+
+        /**
+         * 查看订单详细信息
+         * @param orderId
+         * @return
+         */
+        OrderVO getOrders(Long orderId);
+
+        /**
+         * 取消订单
+         * @param orderId
+         */
+        void cancelById(Long orderId);
+
+        /**
+         * 再来一单
+         * @param userId
+         */
+        void getSameOrder(Long userId);
+
+        PageResult searchOrder(OrdersPageQueryDTO ordersPageQueryDTO);
+
+        OrderStatisticsVO countStatus();
+
+        void confirmOrder(OrdersConfirmDTO ordersConfirmDTO);
+
+        void rejectOrder(OrdersRejectionDTO ordersRejectionDTO);
+
+        void cancelOrder(OrdersCancelDTO ordersCancelDTO);
+
+        void deliveryOrder(Long id);
+
+        void completeOrder(Long id);
 }

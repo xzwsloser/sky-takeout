@@ -43,3 +43,5 @@
 [shop_car_cache.md](doc%2Fshop_car_cache.md)
 ## 用户下单和支付功能
 [wx_pay.md](doc%2Fwx_pay.md)
+## 用户管理模块(自主任务)
+[order_manager.md](doc%2Forder_manager.md)

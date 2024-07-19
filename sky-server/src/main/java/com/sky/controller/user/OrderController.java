@@ -1,11 +1,14 @@
 package com.sky.controller.user;
 
+import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersPaymentDTO;
 import com.sky.dto.OrdersSubmitDTO;
+import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.OrderService;
 import com.sky.vo.OrderPaymentVO;
 import com.sky.vo.OrderSubmitVO;
+import com.sky.vo.OrderVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +33,7 @@ public class OrderController {
     @PostMapping("/submit")
     @ApiOperation("用户下单接口")
     public Result<OrderSubmitVO> submit(@RequestBody OrdersSubmitDTO ordersSubmitDTO) {
-        log.info("用户下单接口,{}",ordersSubmitDTO);
+        log.info("用户下单接口,{}", ordersSubmitDTO);
         OrderSubmitVO orderSubmitVO = orderService.submitOrder(ordersSubmitDTO);
         return Result.success(orderSubmitVO);
     }
@@ -50,4 +53,43 @@ public class OrderController {
         log.info("生成预支付交易单：{}", orderPaymentVO);
         return Result.success(orderPaymentVO);
     }
+
+    /**
+     * 查看历史订单
+     */
+    @GetMapping("/historyOrders")
+    @ApiOperation("查看历史订单")
+    public Result<PageResult> queryHistoryOrder(OrdersPageQueryDTO ordersPageQueryDTO) {
+        PageResult pageResult = orderService.queryHistoryOrder(ordersPageQueryDTO);
+        return Result.success(pageResult);
+    }
+
+
+    /**
+     * 查询订单详细信息
+     * @param orderId
+     */
+    @GetMapping("/orderDetail/{id}")
+    @ApiOperation("查询订单详细信息")
+    public Result<OrderVO> queryDetail(@PathVariable("id")Long orderId){
+        OrderVO orderVO = orderService.getOrders(orderId);
+        return Result.success(orderVO);
+    }
+
+
+    @PutMapping("/cancel/{id}")
+    @ApiOperation("取消订单")
+    public Result cancelOrders(@PathVariable("id") Long orderId){
+        orderService.cancelById(orderId);
+        return Result.success();
+    }
+
+    @PostMapping("/repetition/{id}")
+    @ApiOperation("再来一单")
+    public Result getSameOrder(@PathVariable("id")Long userId){
+        orderService.getSameOrder(userId);
+        return Result.success();
+    }
+
+
 }

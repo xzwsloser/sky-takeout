@@ -91,3 +91,9 @@ public class OrderTask {
     - orderId 订单id
     - content 消息内容
 - 谷歌浏览器没有声音,是否是没有打开声音权限
+# 客户催单
+## 需求设计
+- 需求设计和上面一致,就是消息的类型不同
+- 接口设计:
+  - Path: /user/order/reminder/{id}
+  - Method: GET

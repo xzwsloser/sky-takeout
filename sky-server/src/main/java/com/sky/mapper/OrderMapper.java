@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author xzw
@@ -71,4 +72,5 @@ public interface OrderMapper {
     @Select("select * from orders where status = #{status} and order_time < #{orderTime}")
     List<Orders> getByStatusAndOrderTypeLT(Integer status, LocalDateTime orderTime);
 
+    Double sumByMap(Map<String, Object> map);
 }

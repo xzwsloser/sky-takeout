@@ -47,3 +47,5 @@
 [order_manager.md](doc%2Forder_manager.md)
 ## 超时订单的定时处理
 [order_cancel_task.md](doc%2Forder_cancel_task.md)
+## 图形报表
+[echart_use.md](doc%2Fechart_use.md)

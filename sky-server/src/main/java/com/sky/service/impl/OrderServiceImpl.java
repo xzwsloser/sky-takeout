@@ -303,4 +303,27 @@ public class OrderServiceImpl implements OrderService {
     public void completeOrder(Long id) {
         orderMapper.updateOrderStatus(id,COMPLETED);
     }
+
+    /**
+     * 可会催单
+     * @param id
+     */
+    @Override
+    public void reminder(Long id) {
+        // 首先查询
+        // 根据订单号查询订单
+        Orders ordersDB = orderMapper.getOrderById(id);
+        if(ordersDB == null){
+            throw  new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+
+        // 推动消息
+        Map<String,Object> map = new HashMap<>();
+        map.put("type", 2);  // 表示消息类型: 1. 来单提醒 2. 表示用户催单
+        map.put("orderId",ordersDB.getId());
+        map.put("content","订单号:" + ordersDB.getNumber());
+        String jsonStr = JSON.toJSONString(map);
+        // 推动到页面
+        webSocketServer.sendToAllClient(jsonStr);  // 推送消息
+    }
 }

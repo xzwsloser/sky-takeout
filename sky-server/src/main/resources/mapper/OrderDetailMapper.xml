@@ -11,4 +11,15 @@
             (#{od.id},#{od.name},#{od.image},#{od.orderId},#{od.dishId},#{od.setmealId},#{od.dishFlavor},#{od.number},#{od.amount})
         </foreach>
     </insert>
+
+    <select id="getTop10" resultType="com.sky.dto.GoodsSalesDTO">
+        select count(*) as numbers , name from order_detail
+        where order_id in
+        <foreach collection="orderIds" item="od" open="(" close=")" separator=",">
+            #{od}
+        </foreach>
+        group by name
+        order by numbers desc
+        limit  10
+    </select>
 </mapper>

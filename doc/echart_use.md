@@ -71,4 +71,10 @@
   - Method: GET
   - 请求参数: begin end
   - 返回数据: dateList,orderCompletedRate,orderCountList,totalOrderCount,validOrderCount,validOrderCountList
+# 销量排名Top10
+- 就是统计销量排名top10的菜品或者套餐,降序排列,就是商品销量的接口
+- 接口设计:
+  - Path: /admin/report/top10
+  - Method: GET
+  - 返回参数: nameList,numberList
 

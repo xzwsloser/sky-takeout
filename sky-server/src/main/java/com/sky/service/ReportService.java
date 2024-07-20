@@ -1,6 +1,7 @@
 package com.sky.service;
 
 import com.sky.vo.OrderReportVO;
+import com.sky.vo.SalesTop10ReportVO;
 import com.sky.vo.TurnoverReportVO;
 import com.sky.vo.UserReportVO;
 import org.springframework.stereotype.Service;
@@ -21,4 +22,6 @@ public interface ReportService {
     UserReportVO userReport(LocalDate begin, LocalDate date);
 
     OrderReportVO orderReportResult(LocalDate begin, LocalDate end);
+
+    SalesTop10ReportVO saleTop10Result(LocalDate begin, LocalDate end);
 }

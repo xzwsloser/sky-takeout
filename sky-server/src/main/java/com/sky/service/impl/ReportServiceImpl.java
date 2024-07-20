@@ -1,10 +1,13 @@
 package com.sky.service.impl;
 
+import com.sky.dto.GoodsSalesDTO;
 import com.sky.entity.Orders;
+import com.sky.mapper.OrderDetailMapper;
 import com.sky.mapper.OrderMapper;
 import com.sky.mapper.UserMapper;
 import com.sky.service.ReportService;
 import com.sky.vo.OrderReportVO;
+import com.sky.vo.SalesTop10ReportVO;
 import com.sky.vo.TurnoverReportVO;
 import com.sky.vo.UserReportVO;
 import lombok.Data;
@@ -23,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author xzw
@@ -45,6 +49,9 @@ public class ReportServiceImpl implements ReportService {
      */
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private OrderDetailMapper orderDetailMapper;
 
     @Override
     public TurnoverReportVO turnoverReport(LocalDate begin, LocalDate end) {
@@ -166,5 +173,23 @@ public class ReportServiceImpl implements ReportService {
                 .validOrderCount(validSum)
                 .totalOrderCount(totalSum)
                 .orderCompletionRate((double)validSum / (double)totalSum).build();
+    }
+
+    @Override
+    public SalesTop10ReportVO saleTop10Result(LocalDate begin, LocalDate end) {
+        // 查询日期列表
+        // 查询所有 order_id,之后根据 order_id 查询菜品排名
+        Map<String,LocalDateTime> map = new HashMap<>() ;
+        map.put("begin",LocalDateTime.of(begin,LocalTime.MIN));
+        map.put("end",LocalDateTime.of(end,LocalTime.MAX));
+        List<Integer> orderIds = orderMapper.getOrderIds(map);  // 获取到订单的id列表
+        // 根据订单列表查询
+        List<GoodsSalesDTO> res = orderDetailMapper.getTop10(orderIds);
+        // 开始获取列表
+        List<String> nameList = res.stream().map(goods -> goods.getName()).collect(Collectors.toList());
+        List<Integer> numberList = res.stream().map(goods -> goods.getNumber()).collect(Collectors.toList());
+        return SalesTop10ReportVO.builder()
+                .nameList(StringUtils.join(nameList,","))
+                .numberList(StringUtils.join(numberList,",")).build();
     }
 }

@@ -1,5 +1,6 @@
 package com.sky.mapper;
 
+import com.sky.dto.GoodsSalesDTO;
 import com.sky.entity.OrderDetail;
 import com.sky.entity.Orders;
 import org.apache.ibatis.annotations.Delete;
@@ -27,4 +28,6 @@ public interface OrderDetailMapper {
 
     @Select("select * from orders where id = #{orderId}")
     Orders getOrderById(Long orderId);
+
+    List<GoodsSalesDTO> getTop10(List<Integer> orderIds);
 }

@@ -1,6 +1,7 @@
 package com.sky.mapper;
 
 import com.github.pagehelper.Page;
+import com.sky.dto.GoodsSalesDTO;
 import com.sky.entity.Orders;
 import com.sky.vo.OrderVO;
 import org.apache.ibatis.annotations.*;
@@ -77,4 +78,7 @@ public interface OrderMapper {
     Integer getTotalOrders(Map<String, Object> map);
 
     Integer getValidOrders(Map<String, Object> map);
+
+    List<Integer> getOrderIds(Map<String, LocalDateTime> map);
+
 }

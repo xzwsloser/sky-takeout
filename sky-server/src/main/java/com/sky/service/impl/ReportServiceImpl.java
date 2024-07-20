@@ -4,6 +4,7 @@ import com.sky.entity.Orders;
 import com.sky.mapper.OrderMapper;
 import com.sky.mapper.UserMapper;
 import com.sky.service.ReportService;
+import com.sky.vo.OrderReportVO;
 import com.sky.vo.TurnoverReportVO;
 import com.sky.vo.UserReportVO;
 import lombok.Data;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.sound.sampled.DataLine;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -43,6 +45,7 @@ public class ReportServiceImpl implements ReportService {
      */
     @Autowired
     private UserMapper userMapper;
+
     @Override
     public TurnoverReportVO turnoverReport(LocalDate begin, LocalDate end) {
         // 统计营业额
@@ -121,5 +124,47 @@ public class ReportServiceImpl implements ReportService {
                 .totalUserList(totalUserList)
                 .newUserList(newUserList)
                 .build();
+    }
+
+    @Override
+    public OrderReportVO orderReportResult(LocalDate begin, LocalDate end) {
+        // 首先获取日期列表
+        List<LocalDate> dateLists = new ArrayList<>();
+        dateLists.add(begin);
+        while(!begin.equals(end)){
+            begin = begin.plusDays(1);
+            dateLists.add(begin);
+        }
+        // 转化为字符串
+        String dateList = StringUtils.join(dateLists, ",");
+        // 获取每一天的有效订单数量和总订单数量
+        List<Integer> totalOrder = new ArrayList<>();
+        List<Integer> validOrder = new ArrayList<>();
+        Integer totalSum = 0;
+        Integer validSum = 0;
+        for (LocalDate date : dateLists) {
+            // 确定开始时间和结束时间
+            LocalDateTime beginTime = LocalDateTime.of(date,LocalTime.MIN);
+            LocalDateTime endTime = LocalDateTime.of(date, LocalTime.MAX);
+            Map<String,Object> map = new HashMap<>();
+            map.put("begin",beginTime);
+            map.put("end",endTime);
+            Integer totalCount = orderMapper.getTotalOrders(map); // 查询总订单数量
+            Integer validCount = orderMapper.getValidOrders(map);  // 查询有效订单数量
+            totalOrder.add(totalCount);
+            validOrder.add(validCount);
+            totalSum += totalCount;
+            validSum += validCount;
+        }
+        // 变成字符串
+        String totalOrders = StringUtils.join(totalOrder, ",");
+        String validOrders = StringUtils.join(validOrder, ",");
+        return OrderReportVO.builder()
+                .dateList(dateList)
+                .orderCountList(totalOrders)
+                .validOrderCountList(validOrders)
+                .validOrderCount(validSum)
+                .totalOrderCount(totalSum)
+                .orderCompletionRate((double)validSum / (double)totalSum).build();
     }
 }

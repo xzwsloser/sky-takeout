@@ -73,4 +73,8 @@ public interface OrderMapper {
     List<Orders> getByStatusAndOrderTypeLT(Integer status, LocalDateTime orderTime);
 
     Double sumByMap(Map<String, Object> map);
+
+    Integer getTotalOrders(Map<String, Object> map);
+
+    Integer getValidOrders(Map<String, Object> map);
 }

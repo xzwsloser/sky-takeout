@@ -59,3 +59,16 @@
   - Method: GET
   - 参数: begin,end
   - 返回数据 dateList,newUserList,totalUserList(UserReportVO)
+# 订单统计
+- 利用两个曲线分别记录总订单数量和有效订单数量
+- 同时需要记录订单总数和有效订单数量,用以展示订单完成率
+- 业务规则:
+  - 有效订单指状态为已完成的订单
+  - 基于可视化报表的折线图展示订单数据,X轴为日期,Y轴为订单数量
+  - 根据时间选择区间,展示每天的订单总数和有效订单数
+- 接口设计:
+  - Path: /admin/report/orderStatistics
+  - Method: GET
+  - 请求参数: begin end
+  - 返回数据: dateList,orderCompletedRate,orderCountList,totalOrderCount,validOrderCount,validOrderCountList
+

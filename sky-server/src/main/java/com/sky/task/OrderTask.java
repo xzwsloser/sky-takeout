@@ -23,7 +23,7 @@ public class OrderTask {
     @Autowired
     private OrderMapper orderMapper;
 
-    @Scheduled(cron = "0 * * * * ? *")  // 表示每分钟出发一次
+    @Scheduled(cron = "0 * * * * ? ")  // 表示每分钟出发一次
     public void processTimeOutOrder(){
         log.info("定时触发超时订单,{}", LocalDateTime.now());
         // 查询订单状态
@@ -41,7 +41,7 @@ public class OrderTask {
     }
 
     // 处理这一种在派送中的订单,定时处理处于派送中的订单,注意表达式如何处理,就可以直接使用
-    @Scheduled(cron = "0 0 1 * * ? *")
+    @Scheduled(cron = "0 0 1 * * ? ")
     public void processDeliveryOrder(){
         log.info("定时处理定时中的订单,{}",LocalDateTime.now());
         // 上一个工作日的订单

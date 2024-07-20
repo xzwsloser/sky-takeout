@@ -59,3 +59,35 @@ public class OrderTask {
     }
 }
 ```
+# WebSocket
+- WebSocket是基于 TCP 的一种新的网络协议,实现了浏览器和服务器全双工通信,浏览器和服务器之间只用完成一次握手就可以创建持久性的连接,并且进行双向数据传递
+- WebSocket 和 Http 协议的时序图对比
+![Screenshot_20240720_095640_tv.danmaku.bilibilihd.jpg](img%2FScreenshot_20240720_095640_tv.danmaku.bilibilihd.jpg)
+- Http协议和WebSocket协议对比:
+  - Http是短连接
+  - WebSocket是长连接
+  - Http通信是单向的,基于请求响应模式
+  - WebSocket支持双向通信
+  - Http和WebSocket底层都是TCP连接
+- WebSocket的应用场景:
+  - 弹幕
+  - 网页聊天
+  - 实况更新(页面没有刷新(没有发送请求),但是数据可以发生变化)
+- 浏览器和服务器双向的发送消息
+## WebSocket的使用
+- 一般浏览器就是客户端,浏览器请求服务器就是握手的过程,这一个过程可以建立客户端和服务器端的连接
+- 注意需要导入组件WebSocketServer,还需要配置相关的配置类
+- 可以导入定时任务类WebSocketTask,定时向客户端推送数据
+- 代码可以参考:    [WebSocketServer.java](..%2Fsky-server%2Fsrc%2Fmain%2Fjava%2Fcom%2Fsky%2Fwebsocket%2FWebSocketServer.java)
+## 来单提醒
+- 需求分析和设计:
+  - 通知的形式: 语音播报
+- 设计:
+  - 通过WebSocket实现管理端页面和服务端页面保持长连接状态
+  - 当客户支付之后,调用WebSocket的相关API实现服务端向客户都安推送消息
+  - 客户都安浏览器解析服务端推送的消息之后,判断是来单提醒还是客户催单,进行相应的消息提示和语音播报
+  - 约定服务端发送客户端浏览器的数据格式为 JSON,字段包括: type,orderId,content
+    - type 为消息类型
+    - orderId 订单id
+    - content 消息内容
+- 谷歌浏览器没有声音,是否是没有打开声音权限

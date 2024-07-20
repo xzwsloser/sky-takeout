@@ -1,8 +1,10 @@
 package com.sky.controller.user;
 
+import com.alibaba.fastjson.JSON;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersPaymentDTO;
 import com.sky.dto.OrdersSubmitDTO;
+import com.sky.entity.Orders;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.OrderService;
@@ -14,6 +16,10 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author xzw
@@ -49,8 +55,17 @@ public class OrderController {
     @ApiOperation("订单支付")
     public Result<OrderPaymentVO> payment(@RequestBody OrdersPaymentDTO ordersPaymentDTO) throws Exception {
         log.info("订单支付：{}", ordersPaymentDTO);
-        OrderPaymentVO orderPaymentVO = orderService.payment(ordersPaymentDTO);
+//        OrderPaymentVO orderPaymentVO = orderService.payment(ordersPaymentDTO);
+        OrderPaymentVO orderPaymentVO = OrderPaymentVO.builder()
+                .nonceStr("支付成功")
+                .paySign("支付成功")
+                .timeStamp("2024-07-20")
+                .signType("rsa")
+                .packageStr("110").build();
         log.info("生成预支付交易单：{}", orderPaymentVO);
+        // 根据订单号查询订单
+        log.info("订单号:,{}",ordersPaymentDTO.getOrderNumber());
+        orderService.paySuccess(ordersPaymentDTO.getOrderNumber());
         return Result.success(orderPaymentVO);
     }
 

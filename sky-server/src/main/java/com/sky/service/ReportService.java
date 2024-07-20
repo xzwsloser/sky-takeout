@@ -1,6 +1,7 @@
 package com.sky.service;
 
 import com.sky.vo.TurnoverReportVO;
+import com.sky.vo.UserReportVO;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -15,4 +16,6 @@ import java.time.LocalDateTime;
 @Service
 public interface ReportService {
     TurnoverReportVO turnoverReport(LocalDate begin, LocalDate end);
+
+    UserReportVO userReport(LocalDate begin, LocalDate date);
 }

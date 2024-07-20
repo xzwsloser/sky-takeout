@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 /**
  * @author xzw
  * @version 1.0
@@ -25,4 +27,6 @@ public interface UserMapper {
 
     @Select("select * from user where id = #{userId}")
     User getById(Long userId);
+
+    Integer getUserCount(Map<String, Object> map);
 }

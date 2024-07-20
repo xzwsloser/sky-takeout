@@ -9,4 +9,12 @@
             values
             (#{id},#{openid},#{name},#{phone},#{sex},#{idNumber},#{avatar},#{createTime})
         </insert>
+    <select id="getUserCount" resultType="java.lang.Integer">
+        select count(*) from user
+        <where>
+            <if test="end != null">
+                and create_time &lt; #{end}
+            </if>
+        </where>
+    </select>
 </mapper>

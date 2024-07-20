@@ -48,3 +48,14 @@
         </where>
     </select>
 ```
+# 用户统计
+## 需求分析
+- 利用折线图统计用户的数量,利用两条折线,分别统计用户的数量和用户增加的数量
+- 业务规则:
+  - 基于可视化报表的折线图展示用户数据,X轴为日期,Y轴为用户数量
+  - 根据时间选择区间,展示每天的用户总量和新增用户数量
+- 接口设计:
+  - Path: /admin/report/userStatistics
+  - Method: GET
+  - 参数: begin,end
+  - 返回数据 dateList,newUserList,totalUserList(UserReportVO)

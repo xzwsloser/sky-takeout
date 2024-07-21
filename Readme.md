@@ -51,3 +51,5 @@
 [echart_use.md](doc%2Fechart_use.md)
 ## 数据统计-Excel报表
 [excel_use.md](doc%2Fexcel_use.md)
+## 项目汇总
+[project_sum.md](doc%2Fproject_sum.md)

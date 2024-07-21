@@ -49,3 +49,5 @@
 [order_cancel_task.md](doc%2Forder_cancel_task.md)
 ## 图形报表
 [echart_use.md](doc%2Fechart_use.md)
+## 数据统计-Excel报表
+[excel_use.md](doc%2Fexcel_use.md)

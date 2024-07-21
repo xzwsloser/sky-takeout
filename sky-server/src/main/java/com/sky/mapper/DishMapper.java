@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.*;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface DishMapper {
@@ -41,4 +42,11 @@ public interface DishMapper {
 
     @Update("update dish set status = #{status} where id = #{id}")
     void setStatus(@Param("id") Long id, @Param("status") Integer status);
+
+    /**
+     * 根据条件统计菜品数量
+     * @param map
+     * @return
+     */
+    Integer countByMap(Map map);
 }

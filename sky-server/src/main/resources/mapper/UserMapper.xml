@@ -17,4 +17,17 @@
             </if>
         </where>
     </select>
+<!--      新增用户数量 -->
+    <select id="getTotalUsers" resultType="java.lang.Integer">
+        select count(*) from user
+        <where>
+            <if test="begin != null">
+                create_time &gt; #{begin}
+            </if>
+
+            <if test="end != null">
+                and  create_time &lt; #{end}
+            </if>
+        </where>
+    </select>
 </mapper>
